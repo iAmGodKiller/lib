@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sacred Library | Webbooks</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+Devanagari:wght@500;600&family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#e9c349",
+                        "on-background": "#e5e2e1",
+                        "background": "#0a0a0c",
+                        "primary": "#d6bcf4",
+                        "surface": "#131313",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#ccc4cf"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "devanagari": ["Noto Serif Devanagari", "serif"],
+                        "body": ["Inter"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Shared Cosmic Background Styles */
+        .cosmic-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a0c 100%);
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200vmax;
+            height: 200vmax;
+            margin-top: -100vmax;
+            margin-left: -100vmax;
+            border-radius: 50%;
+        }
+
+        .star-layer-1 {
+            background-image: 
+                radial-gradient(circle at 20px 30px, #ffffff, transparent 1px),
+                radial-gradient(circle at 100px 80px, #e0ebff, transparent 1.5px),
+                radial-gradient(circle at 200px 150px, #ffffff, transparent 1px),
+                radial-gradient(circle at 310px 40px, #fffae6, transparent 2px);
+            background-size: 433px 433px;
+            animation: drift 240s linear infinite, twinkle 4s ease-in-out infinite alternate;
+        }
+
+        .star-layer-2 {
+            background-image: 
+                radial-gradient(circle at 50px 120px, #ffffff, transparent 1.5px),
+                radial-gradient(circle at 180px 40px, #e9c349, transparent 2px);
+            background-size: 509px 509px;
+            animation: drift 320s linear infinite reverse, twinkle 5.5s ease-in-out infinite alternate 1.5s;
+        }
+
+        .nebula {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200vmax;
+            height: 200vmax;
+            margin-top: -100vmax;
+            margin-left: -100vmax;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(107, 85, 133, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(233, 195, 73, 0.05) 0%, transparent 40%);
+            filter: blur(80px);
+            animation: drift 120s linear infinite;
+        }
+
+        .sacred-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 2px 2px, rgba(214, 188, 244, 0.05) 1px, transparent 0);
+            background-size: 60px 60px;
+            opacity: 0.5;
+        }
+
+        @keyframes drift {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.15; }
+            to { opacity: 0.85; }
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.4) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.2) 100%);
+            border-color: rgba(233, 195, 73, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(233, 195, 73, 0.1);
+        }
+
+        .glass-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.4) 100%);
+            backdrop-filter: blur(24px) saturate(1.5);
+            -webkit-backdrop-filter: blur(24px) saturate(1.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 25px rgba(233, 195, 73, 0.4);
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+        }
+
+        body {
+            overflow-x: clip;
+        }
+
+        .snap-section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        input::placeholder {
+            color: rgba(229, 226, 225, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-secondary/30 selection:text-secondary overflow-x-hidden">
+
+<div class="cosmic-canvas">
+    <div class="stars star-layer-1"></div>
+    <div class="stars star-layer-2"></div>
+    <div class="nebula"></div>
+    <div class="sacred-overlay"></div>
+</div>
+
+<main class="snap-section relative z-10 py-24 px-6 max-w-7xl mx-auto min-h-screen">
+    <!-- Hero Section -->
+    <section class="text-center mb-20">
+        <span class="font-label text-secondary tracking-[0.4em] uppercase text-[10px] md:text-xs mb-6 block">Collection of Ancient Wisdom</span>
+        <h1 class="font-devanagari text-6xl md:text-8xl text-primary font-semibold italic tracking-widest text-glow mb-4 leading-tight">
+            ज्ञान सागर
+        </h1>
+        <p class="font-headline text-xl md:text-2xl text-on-surface-variant/80 italic tracking-widest">Ocean of Knowledge</p>
+    </section>
+
+    <!-- Search -->
+    <section class="mb-16">
+        <div class="flex justify-center">
+            <div class="relative w-full max-w-2xl">
+                <input type="text" id="library-search" oninput="filterLibrary()" placeholder="Search scriptures..." class="w-full bg-white/5 border border-white/10 rounded-full py-4 pl-14 pr-6 text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary/50 backdrop-blur-md transition-all">
+                <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-on-surface-variant/60">search</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Library Grid -->
+    <div id="library-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Cards will be injected here -->
+    </div>
+</main>
+
+<!-- Final CTA / Footer -->
+<footer class="snap-section flex flex-col items-center justify-center py-32 text-center px-6 min-h-screen relative z-10 border-t border-white/5">
+    <div class="max-w-4xl mx-auto">
+        <div class="font-devanagari text-5xl md:text-8xl lg:text-9xl text-secondary mb-4 md:mb-8 italic tracking-widest text-glow font-semibold opacity-60">
+            ॐ पूर्णमदः
+        </div>
+        <div class="font-headline text-2xl md:text-4xl text-secondary/40 mb-10 md:mb-16 tracking-[0.3em] uppercase">
+            Om Purnamadah
+        </div>
+        <div class="space-y-12">
+            <a href="https://hinduism.in" target="_blank" class="inline-flex px-10 py-4 rounded-full glass-btn text-secondary hover:scale-110 transition-transform duration-500 focus:outline-none items-center justify-center no-underline cursor-pointer">
+                <span class="font-headline tracking-[0.2em] uppercase text-sm md:text-base">Support the Library</span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const books = [
+        {
+            id: 'ashtavakra-gita',
+            sanskritTitle: 'अष्टावक्र गीता',
+            englishTitle: 'Ashtavakra Gita',
+            tagline: 'Dialogue on the nature of Self and reality.',
+            link: 'agp.html',
+            author: 'Sage Ashtavakra'
+        },
+        {
+            id: 'bhagavad-gita',
+            sanskritTitle: 'भगवद् गीता',
+            englishTitle: 'Bhagavad Gita',
+            tagline: 'The timeless spiritual discourse of Lord Krishna.',
+            link: '#',
+            author: 'Veda Vyasa'
+        },
+        {
+            id: 'avadhuta-gita',
+            sanskritTitle: 'अवधूत गीता',
+            englishTitle: 'Avadhuta Gita',
+            tagline: 'The song of the free soul.',
+            link: '#',
+            author: 'Dattatreya'
+        },
+        {
+            id: 'isha-upanishad',
+            sanskritTitle: 'ईशावास्य उपनिषद्',
+            englishTitle: 'Isha Upanishad',
+            tagline: 'The inner ruler of everything.',
+            link: '#',
+            author: 'Ancient Seers'
+        },
+        {
+            id: 'vivekachudamani',
+            sanskritTitle: 'विवेकचूडामणि',
+            englishTitle: 'Vivekachudamani',
+            tagline: 'The Crest-Jewel of Discrimination.',
+            link: '#',
+            author: 'Adi Shankara'
+        },
+        {
+            id: 'mandukya-upanishad',
+            sanskritTitle: 'माण्डूक्य उपनिषद्',
+            englishTitle: 'Mandukya Upanishad',
+            tagline: 'Analysis of the four states of consciousness.',
+            link: '#',
+            author: 'Ancient Seers'
+        },
+        {
+            id: 'nirvana-shatakam',
+            sanskritTitle: 'निर्वाण षटकम्',
+            englishTitle: 'Nirvana Shatakam',
+            tagline: 'Six verses on absolute non-dualism and liberation.',
+            link: '#',
+            author: 'Adi Shankara'
+        }
+    ];
+
+    function renderLibrary(filteredBooks) {
+        const grid = document.getElementById('library-grid');
+        grid.innerHTML = '';
+
+        filteredBooks.forEach(book => {
+            const card = document.createElement('a');
+            card.href = book.link;
+            card.className = 'glass-card p-8 rounded-[2rem] flex flex-col justify-between group no-underline';
+            card.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-start mb-10">
+                        <span class="font-label text-[10px] tracking-[0.2em] text-secondary/60 uppercase">${book.author}</span>
+                        <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined text-sm text-secondary">arrow_forward</span>
+                        </div>
+                    </div>
+                    <h2 class="font-devanagari text-4xl text-primary mb-2 group-hover:text-glow transition-all">${book.sanskritTitle}</h2>
+                    <h3 class="font-headline italic text-lg text-on-surface mb-6">${book.englishTitle}</h3>
+                    <p class="text-on-surface-variant/70 font-body text-sm leading-relaxed font-light line-clamp-2">${book.tagline}</p>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Helper: Normalize strings for Indic phonetic matching
+    function normalizeIndic(str) {
+        return str.toLowerCase()
+                  .replace(/h/g, '')
+                  .replace(/w/g, 'v')
+                  .replace(/c/g, 'k')
+                  .replace(/y/g, 'i')
+                  .replace(/ee/g, 'i')
+                  .replace(/oo/g, 'u')
+                  .replace(/[^a-z0-9]/g, '');
+    }
+
+    // Helper: Calculate Levenshtein similarity (0.0 to 1.0)
+    function getSimilarity(a, b) {
+        if (a.length === 0) return b.length === 0 ? 1.0 : 0.0;
+        if (b.length === 0) return 0.0;
+        let matrix = [];
+        for(let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for(let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for(let i = 1; i <= b.length; i++) {
+            for(let j = 1; j <= a.length; j++) {
+                if(b.charAt(i-1) === a.charAt(j-1)) {
+                    matrix[i][j] = matrix[i-1][j-1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i-1][j-1] + 1, // substitution
+                        Math.min(matrix[i][j-1] + 1, // insertion
+                        matrix[i-1][j] + 1) // deletion
+                    );
+                }
+            }
+        }
+        let maxLen = Math.max(a.length, b.length);
+        return (maxLen - matrix[b.length][a.length]) / maxLen;
+    }
+
+    function filterLibrary() {
+        const query = document.getElementById('library-search').value.toLowerCase().trim();
+        const searchTerms = query.split(/\s+/).filter(term => term.length > 0);
+        
+        const filtered = books.filter(book => {
+            // If the search is empty, show all books
+            if (searchTerms.length === 0) return true;
+
+            // Combine all book data into one searchable string
+            const searchableString = `${book.englishTitle} ${book.sanskritTitle} ${book.author} ${book.tagline}`.toLowerCase();
+            const targetWords = searchableString.split(/[\s,.-]+/);
+            const noSpaceTarget = searchableString.replace(/\s+/g, '');
+
+            return searchTerms.every(term => {
+                // 1. Exact Substring Match
+                if (searchableString.includes(term)) return true;
+                if (noSpaceTarget.includes(term)) return true;
+
+                // 2. Normalized Substring Match (handles "bhagwat" inside "bhagavadgita")
+                const normTerm = normalizeIndic(term);
+                if (normTerm.length === 0) return false;
+                
+                const normSearchableString = normalizeIndic(searchableString);
+                if (normSearchableString.includes(normTerm)) return true;
+
+                // 3. Fuzzy Match against individual words
+                return targetWords.some(word => {
+                    const normWord = normalizeIndic(word);
+                    if (normWord.length === 0) return false;
+                    
+                    // Full word similarity
+                    let sim = getSimilarity(normTerm, normWord);
+                    
+                    // Dynamic thresholds based on length (more forgiving for long complex words)
+                    let threshold = 0.75; 
+                    if (normTerm.length >= 7) threshold = 0.5; // Very forgiving for "astravkya"
+                    else if (normTerm.length >= 5) threshold = 0.6; 
+                    else if (normTerm.length >= 4) threshold = 0.65;
+
+                    if (sim >= threshold) return true;
+
+                    // Prefix similarity for partial typing with typos (e.g., typing "astrav")
+                    if (normWord.length > normTerm.length && normTerm.length >= 4) {
+                         let prefixSim = getSimilarity(normTerm, normWord.substring(0, normTerm.length));
+                         let prefixThreshold = normTerm.length >= 6 ? 0.6 : 0.7;
+                         if (prefixSim >= prefixThreshold) return true;
+                         
+                         let prefixSim2 = getSimilarity(normTerm, normWord.substring(0, normTerm.length + 1));
+                         if (prefixSim2 >= prefixThreshold) return true;
+                    }
+
+                    return false;
+                });
+            });
+        });
+        
+        renderLibrary(filtered);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderLibrary(books);
+    });
+</script>
+</body>
+</html>
